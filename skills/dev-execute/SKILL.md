@@ -40,8 +40,9 @@ Tasks tightly coupled with shared evolving state? → INLINE, or go re-split the
    (Goal, Global Constraints) plus the Interfaces blocks of completed tasks
    it consumes. Pass briefs as *file paths*, never pasted into the prompt —
    pasted history bloats every downstream dispatch.
-2. **Dispatch a fresh implementer subagent** with the brief. It implements,
-   tests, commits, and reports status.
+2. **Dispatch a fresh implementer subagent** with the brief. If the task
+   names domain skills (its `Skills:` field), the implementer invokes them
+   before writing code. It implements, tests, commits, and reports status.
 3. **Review the diff** with a fresh reviewer subagent. Diff base is the
    commit before the task started — **never `HEAD~1`**, which silently drops
    all but the last commit of a multi-commit task. The reviewer returns TWO

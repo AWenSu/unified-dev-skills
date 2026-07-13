@@ -69,6 +69,10 @@ Each task uses this template:
 
 **Files:** exact paths, with line ranges for edits (`src/auth.py:123-145`)
 **Depends on:** Task M / none
+**Skills:** <domain skills the implementer must invoke, or "none" — e.g. a
+  UI-design skill for visual tasks, a platform skill (Cloudflare, MCP
+  builder) for platform idioms. Name them now so execution doesn't have to
+  rediscover them.>
 **Interfaces:**
   - Consumes: <exact names + signatures this task uses from earlier tasks>
   - Produces: <exact names + signatures later tasks will use>
