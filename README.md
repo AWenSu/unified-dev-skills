@@ -37,6 +37,10 @@ Skip rules are built in: small tasks bypass stages 1–3 entirely; only large
 or risky plans go through review. Planning overhead should never exceed ~20%
 of the task itself.
 
+**Per-project-type defaults** (which stages to run, which lenses fire, what
+to layer on top for web apps, APIs, CLIs, MCP servers, serverless, docs,
+scraping): see [PROJECT-TYPE-GUIDE.md](PROJECT-TYPE-GUIDE.md).
+
 ## Install
 
 Copy `skills/` into any location Claude Code loads skills from:
