@@ -7,6 +7,7 @@ provenance:
     - superpowers:subagent-driven-development @6.1.1 (orchestration spine, ledger, status protocol, model matrix, two-verdict review, BASE rule)
     - superpowers:executing-plans @6.1.1 (inline fallback, stop conditions, branch rule)
     - planning-with-files @3.5.0 (filesystem-as-memory: findings/progress files, 2-action rule)
+    - mattpocock/skills code-review @1.2.0 (Fowler smell baseline in smells.md, two-axis no-merged-ranking rule, staleness/relocate-by-Delivers rule; added 2026-07-22)
   dropped: task-brief/review-package helper scripts (plugin-internal paths; inlined their intent as prompt rules)
 ---
 

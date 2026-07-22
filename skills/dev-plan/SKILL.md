@@ -6,6 +6,7 @@ provenance:
   sources:
     - superpowers:writing-plans @6.1.1 (plan artifact format, Interfaces block, No Placeholders, task right-sizing, type-consistency check)
     - ~/.claude/agents/planner.md (risk grading, sizing guide, success-criteria checklist)
+    - mattpocock/skills to-tickets + tdd @1.2.0 (Delivers behavior line, tests-only-at-confirmed-seams, expand–contract wide-refactor sequencing; added 2026-07-22)
   dropped: nothing significant — these two composed cleanly
 ---
 
