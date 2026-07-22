@@ -8,6 +8,8 @@ provenance:
     - superpowers:executing-plans @6.1.1 (inline fallback, stop conditions, branch rule)
     - planning-with-files @3.5.0 (filesystem-as-memory: findings/progress files, 2-action rule)
     - mattpocock/skills code-review @1.2.0 (Fowler smell baseline in smells.md, two-axis no-merged-ranking rule, staleness/relocate-by-Delivers rule; added 2026-07-22)
+    - superpowers:subagent-driven-development + tdd @6.1.1 second pass (report files, pre-flight plan review, plan-mandated arbitration, delete-code-before-test, testing anti-patterns; added 2026-07-23)
+    - gstack plan-eng-review sections @1.60.1.0 (evidence gate, coverage diagram; added 2026-07-23)
   dropped: task-brief/review-package helper scripts (plugin-internal paths; inlined their intent as prompt rules)
 ---
 
@@ -38,6 +40,16 @@ Tasks tightly coupled with shared evolving state? → INLINE, or go re-split the
 
 ## ORCHESTRATED mode
 
+### Pre-flight plan review (before Task 1, from superpowers)
+
+One scan of the whole plan before any dispatch, checking for:
+tasks that contradict each other, tasks that violate the plan's own Global
+Constraints, and anything the plan mandates that the review rubric
+(smells.md, repo standards) would flag as a defect. Findings → ONE batched
+question to the user, each item quoting the plan's text and asking which
+wins. Clean scan → proceed silently. Cheap once; discovering a plan
+contradiction at Task 7 is not.
+
 ### Per task loop
 
 1. **Extract the task brief** — the task's own text plus the plan header
@@ -51,17 +63,37 @@ Tasks tightly coupled with shared evolving state? → INLINE, or go re-split the
    `Files:` paths/lines still match reality. Mismatch → relocate using the
    task's `Delivers:` behavior, note the drift in the status report; never
    blind-edit whatever now sits at the stated lines.
+   **Test-first is enforced, not aspirational (from superpowers TDD):** the
+   brief states that production code written before its failing test gets
+   deleted and redone — not kept as "reference", not "adapted". Sunk cost is
+   the wrong frame: untested code is a liability, not progress.
+   **Report file:** the implementer writes its full report (what it did,
+   test evidence, concerns) to `.dev-pipeline/task-N-report.md`; its final
+   message is ≤15 lines — status, commits, one-line test summary, concerns.
+   Full reports flowing back inline is how controller contexts blow up.
 3. **Review the diff** with a fresh reviewer subagent. Diff base is the
    commit before the task started — **never `HEAD~1`**, which silently drops
    all but the last commit of a multi-commit task. The reviewer returns TWO
    verdicts: (a) spec compliance — does it do what the task's `Delivers:`
    says: missing behavior, scope creep, implemented-but-wrong; (b) code
    quality — repo standards first, plus the smell baseline in
-   [smells.md](smells.md) (include its path in the brief). Both must pass.
+   [smells.md](smells.md) and the design vocabulary/judgment tools in
+   `dev-discover/design.md` (include both paths in the brief). Both must
+   pass.
    **Never merge or rerank across the two axes** — each axis reports its own
    findings and its own worst issue, no single winner (from mattpocock
    code-review: a change can follow every standard and build the wrong
    thing, or vice versa; one axis must not mask the other).
+   The reviewer reads the task brief and report as *file paths* and returns
+   findings the same way when long — same inline-bloat rule as step 2.
+   **Evidence gate:** every finding quotes the diff/code line that motivates
+   it (file:line + verbatim text); no quotable line → confidence 4-5/10,
+   appendix only, never the main verdict.
+   **Plan-mandated findings (from superpowers):** a finding that conflicts
+   with the plan's own text is the USER's decision. Present the finding and
+   the plan line side by side and ask which wins. Never dismiss it because
+   "the plan says so" — the plan's authorship does not grade its own work —
+   and never dispatch a fix that contradicts the plan without asking.
 4. **Fix loop:** Critical/Important findings → one fix subagent → re-review.
 5. **Ledger append** (see below), then next task.
 
@@ -107,7 +139,12 @@ a crashed session.
 After all tasks: dispatch one final whole-branch reviewer (most capable
 model, diff from merge-base, same two-axis rules: spec axis against the plan's
 Goal + Success Criteria, quality axis with [smells.md](smells.md), no merged
-ranking) → one fix pass for its findings → **dev-finish**.
+ranking). The final reviewer additionally produces a **coverage diagram
+(from gstack)**: trace each entry point through its branches and error
+paths as an ASCII tree, grade each path [★★★ behavior+edge+error / ★★ /
+★ smoke / GAP], and end with one line — `COVERAGE: N/M paths tested (X%)`.
+Coverage claims without the diagram are vibes. Then one fix pass for its
+findings → **dev-finish**.
 
 ## INLINE mode
 

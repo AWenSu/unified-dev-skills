@@ -12,7 +12,9 @@ provenance:
 # dev-debug — Diagnosis Loop
 
 Skip phases only when explicitly justified. Read `CONTEXT.md` (if it exists)
-before exploring, so you name modules the way the project does.
+before exploring, so you name modules the way the project does, and
+`docs/adr/` for the affected area — what looks like a bug is sometimes a
+recorded deliberate trade-off; don't "fix" an ADR.
 
 <IRON-LAW>
 NO HYPOTHESIS WITHOUT A RED LOOP.
@@ -104,6 +106,13 @@ dev-discover candidate). With a seam:
 
 Fix the root cause, not the symptom — a fix you can't explain in one
 sentence ("X assumed Y, but Z") is a patch, not a fix.
+
+**Three-strikes circuit breaker (from superpowers):** count failed fixes.
+Under 3 → return to Phase 3 and re-analyze. At 3 → STOP; a 4th attempt is
+forbidden. Tell-tales that this is architecture, not a failed hypothesis:
+each fix reveals new coupling somewhere else, the fix keeps growing into a
+refactor, the fix creates new symptoms. Take it to the user as an
+architecture conversation — more thrashing only buries the real problem.
 
 ## Phase 6 — Cleanup + post-mortem
 

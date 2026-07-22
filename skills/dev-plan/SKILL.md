@@ -46,7 +46,10 @@ get locked in. Read enough real code to name exact paths.
 Read `CONTEXT.md` at the repo root if it exists — the project's domain
 glossary. Task names, new symbols, and Interfaces blocks must use its
 vocabulary; a plan that renames a glossary concept is planting an
-inconsistency.
+inconsistency. Also read `docs/adr/` for the areas this plan touches —
+ADRs record decisions the plan must not re-litigate; a task that
+contradicts one must say so explicitly ("contradicts ADR-0007 — reopened
+because …"), never silently.
 
 ### 2. Write the plan header
 
@@ -114,7 +117,9 @@ Rules that make plans executable:
 - **Tests only at confirmed seams.** Every "write failing test" step names
   which seam from the spec's **Test seams** section it exercises. Tests
   verify behavior through that interface — never internals, private methods,
-  or side channels. A task that needs a seam the spec didn't confirm →
+  or side channels. Expected values in test steps come from an independent
+  source of truth (known-good literal, worked example, the spec) — never
+  recomputed the way the implementation computes them (tautological test). A task that needs a seam the spec didn't confirm →
   stop, take it back to the spec (it's a design change, not a planning
   call). Spec has no Test seams section (pre-seam spec) → propose the seam
   list to the user before writing tasks.

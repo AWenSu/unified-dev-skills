@@ -6,6 +6,7 @@ provenance:
   sources:
     - gstack:autoplan @1.60.1.0 (6 decision principles, Mechanical/Taste/UserChallenge taxonomy, sequential lens order, scope-conditional lenses, exit gate)
     - doubt-driven-development (fresh-context adversarial refutation)
+    - gstack plan-{eng,ceo,devex}-review sections/ @1.60.1.0 (evidence gate + confidence, regression iron rule, E2E/EVAL matrix, error registry, DX persona/TTHW/journey, cross-lens themes, TODOS.md; added 2026-07-23)
   dropped: Codex dual-voice (external CLI dep), telemetry, restore points, comparison-board mockups. For the full heavyweight version with dual-model consensus, use gstack /autoplan directly.
 ---
 
@@ -49,14 +50,34 @@ Lens briefs (give each subagent its brief + the plan):
 - **Eng:** Can this be built as written? Architecture, data flow (happy path
   + nil/empty + upstream-error for every flow), edge cases, test strategy,
   performance. Complexity smell: >8 files or >2 new classes/services for the
-  stated goal → flag it.
+  stated goal → flag it. **Regression iron rule (from gstack):** if the
+  audit identifies code that works today but this plan would break, a
+  regression test enters the plan as a critical requirement — no question
+  to the user, no skipping. Test-level check: user flows through 3+
+  components, or integration points where mocks would mask real failures →
+  mark [→E2E]; prompt/tool-definition changes → mark [→EVAL] naming the
+  eval suite. **High-risk plans only:** require an error registry — each
+  failable codepath: what can go wrong → named exception (catch-all is
+  always a smell) → rescued? → rescue action → **what the user sees**;
+  include LLM-call failure modes (empty/refusal/malformed JSON) where
+  relevant.
 - **Design:** Every user-visible state named? Empty states, error states,
   loading. Specificity over vibes — "clean UI" is not a finding.
-- **DX:** Time-to-hello-world, error messages (problem + cause + fix),
-  can a stranger onboard from the artifacts this plan produces?
+- **DX (from gstack plan-devex-review, evidence before scores):** build a
+  one-paragraph **persona card** (who uses this, their context, friction
+  tolerance, what they expect); benchmark **time-to-hello-world** (<2 min
+  excellent, >10 min = most users abandon); **trace the journey**
+  (discover → install → hello world → first debug), citing a concrete
+  friction point with evidence for each stage. Every rating must reference
+  this evidence — no vibes scores. Plus: error messages (problem + cause +
+  fix), can a stranger onboard from the artifacts this plan produces?
 
 Each lens returns: score 0–10, findings list, and for each finding a
-**concrete edit** to the plan (not just a complaint).
+**concrete edit** to the plan (not just a complaint). **Evidence gate (from
+gstack):** every finding quotes the plan/spec/code line that motivates it —
+file:line plus verbatim text. Can't quote a motivating line → the finding is
+unverified: confidence drops to 4-5/10 and it moves to an appendix, out of
+the main report. Findings also carry confidence 1-10.
 
 ## Step 3: Classify every finding — the decision taxonomy
 
@@ -116,6 +137,16 @@ After all questions are resolved, present ONE closing summary:
 
 - Lens scores (before → after edits)
 - Decisions made, one line each (Mechanical auto-applied + user-answered)
+- **Cross-lens themes (from gstack autoplan):** any concern that 2+ lenses
+  raised independently → `Theme: <topic> — flagged by [Eng, DX]`. Independent
+  fresh-context reviewers converging is the strongest signal in the whole
+  review; rank these first.
+
+**Deferred work goes to TODOS.md (from gstack):** anything cut or deferred
+by a review decision — a rejected expansion, a "later" answer — is written
+to the repo's `TODOS.md` with What / Why deferred / Effort (S/M/L/XL) /
+Priority, readable by someone with zero context in 3 months. Vague
+intentions die; unwritten deferrals are how scope decisions evaporate.
 
 Append to the plan file:
 

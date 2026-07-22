@@ -85,8 +85,19 @@ side yourself.
   APIs, the codebase. Resolvable by a background subagent; findings land in
   the Resolution section with citations.
 - **prototype** (HITL) — raise the fidelity of the discussion with a cheap
-  concrete artifact to react to (stub, throwaway UI, runnable sketch). Link
-  the asset from the ticket; the prototype is disposable, the decision isn't.
+  concrete artifact to react to. **A prototype is throwaway code that
+  answers a question** (from mattpocock prototype) — discipline:
+  - *Logic question* → a pure reducer/state-machine with a throwaway shell
+    (CLI/TUI) calling into it; nothing flows the other direction. The pure
+    core may graduate to production later; the shell always dies.
+  - *UI question* → radically different variants mounted **inside the real
+    page** behind a `?variant=` switcher — a standalone demo page is a
+    vacuum, reactions there don't transfer.
+  - *Capture:* commit the prototype to a throwaway branch; only the
+    **decision** reaches the ticket's Resolution (plus decision-rich
+    snippets — a state machine, a schema — inlined there). A prototype that
+    starts growing features is violating plan-don't-do: stop, extract the
+    decision, delete.
 - **grilling** (HITL) — the default: one-question-at-a-time interview
   (dev-discover's step-3 discipline, including the domain-language rules)
   until the question is decided.

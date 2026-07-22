@@ -7,6 +7,7 @@ provenance:
     - superpowers:verification-before-completion @6.1.1 (Iron Law, Gate Function, claim-evidence table, red-green regression rule)
     - superpowers:finishing-a-development-branch @6.1.1 (integration options)
     - built-in /verify concept (drive the real flow, not just the test suite)
+    - superpowers:finishing-a-development-branch @6.1.1 second pass (typed discard confirmation; added 2026-07-23) + gstack TODOS.md deferral + mattpocock ADR offer
 ---
 
 # dev-finish — Verification & Branch Integration
@@ -71,11 +72,15 @@ drive; "all tests pass but the feature doesn't work" is a routine failure.
 
 Open the plan's **Success Criteria** checklist (dev-plan header). Check every
 box with evidence, or say plainly which are unmet and why. Unmet criteria are
-reported, never silently dropped.
+reported, never silently dropped — and any the user accepts shipping without
+go into the repo's `TODOS.md` (What / Why deferred / Effort S-XL / Priority),
+same rule as dev-plan-review: unwritten deferrals evaporate.
 
 If `CONTEXT.md` exists: any new domain term this work introduced belongs in
 it, and public names in the diff should match its vocabulary. One-line check,
-report mismatches — don't rename code at this stage.
+report mismatches — don't rename code at this stage. Same check for ADRs:
+a decision this work locked that is hard to reverse + surprising without
+context + a real trade-off → offer a one-paragraph ADR before integrating.
 
 ## Part 3: Integrate the branch
 
@@ -84,7 +89,11 @@ All boxes checked, evidence fresh — present the user exactly these options:
 1. **Merge** back to the base branch locally
 2. **Push + PR** — PR body summarizes what/why, links spec + plan
 3. **Keep the branch** — user integrates later
-4. **Discard** — the work was exploratory
+4. **Discard** — the work was exploratory. This is the pipeline's only
+   irreversible deletion path: list exactly what will be deleted (branch
+   name, commit list, worktree path), then require the user to type
+   `discard` verbatim. Wait for that exact word — "yes", "ok", "sure" do
+   not count.
 
 Then clean up: worktree removed if one was used, ledger closed with a final
 line, plan file marked complete. Report outcomes faithfully — if anything was

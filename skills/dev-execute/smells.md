@@ -24,3 +24,14 @@ Each smell: what it is → how to fix.
 - **Message Chains** — long `a.b().c().d()` navigation the caller shouldn't depend on. → hide the walk behind one method on the first object.
 - **Middle Man** — a class or function that mostly just delegates onward. → cut it, call the real target direct.
 - **Refused Bequest** — a subclass or implementer that ignores or overrides most of what it inherits. → drop the inheritance, use composition.
+
+# Testing anti-patterns (superpowers TDD + mattpocock tdd)
+
+Unlike the smells above, these are hard findings, not judgement calls —
+each one silently defeats the test's reason to exist.
+
+- **Testing mock behavior** — the assertion verifies what the mock was told to return, so the test passes whether or not the real code works. → assert on the unit's real output/effects; mocks only stand in for boundaries.
+- **Tautological test** — the expected value is computed the same way the code computes it (`expect(add(a,b)).toBe(a+b)`); it passes by construction and can never disagree with the code. → expected values come from an independent source of truth: a known-good literal, a worked example, the spec.
+- **Test-only methods on production classes** — production code grows a method that exists only so a test can reach inside. → test through the public interface; if you can't, the seam is wrong (report it).
+- **Mock at the wrong level** — mocking an internal collaborator instead of the system boundary, so the test pins implementation, not behavior. → understand the dependency chain first; mock only what you don't control.
+- **Partial mock drift** — a mock that mirrors only part of the real structure; code paths reading the unmocked part fail silently or pass wrongly. → mocks mirror the complete real shape, or use a real/in-memory implementation instead.

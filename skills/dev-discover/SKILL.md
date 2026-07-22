@@ -6,7 +6,8 @@ provenance:
   sources:
     - superpowers:brainstorming @6.1.1 (workflow spine, HARD-GATE, one-question rule, spec self-review)
     - gstack:spec @1.60.1.0 (five-question intake, code-evidence rule, dedupe, scope lock)
-    - mattpocock/skills domain-modeling @1.2.0 (CONTEXT.md glossary: challenge terms, sharpen fuzzy language, inline updates)
+    - mattpocock/skills domain-modeling @1.2.0 (CONTEXT.md glossary: challenge terms, sharpen fuzzy language, inline updates; ADR three-condition trigger added 2026-07-23)
+    - mattpocock/skills codebase-design + DEEPENING @1.2.0 (design.md vocabulary, deletion test, dependency-category test strategy, design-it-twice; added 2026-07-23)
   dropped: visual companion (niche, heavy), Codex quality gate (external dep), telemetry, GitHub issue filing (use gstack spec directly when you need issues)
 ---
 
@@ -103,6 +104,16 @@ Present 2–3 approaches with trade-offs. Lead with your recommendation and
 say why. Always include the minimal-viable option — the user must see what
 "smallest thing that works" looks like even if you recommend more.
 
+**Design it twice (from mattpocock codebase-design)** — when the work
+centers on a new interface or module boundary (not for straightforward
+changes): spawn 3 parallel fresh-context subagents, each designing under a
+*different* constraint — "minimize the interface, 1-3 entry points max" /
+"maximize flexibility" / "optimize for the most common caller". Each returns
+interface + usage example + what's hidden + trade-offs. Compare by depth,
+locality, and seam placement (design.md terms), then present a strong
+recommendation, not a menu. Approaches from one context correlate — they
+share your blind spots; constraint-differentiated ones don't.
+
 ### 5. Lock scope
 
 State explicitly, and get agreement on:
@@ -116,8 +127,10 @@ Scope agreed = scope locked. Later expansion is a new decision, not a drift.
 ### 5b. Agree the test seams (from mattpocock to-spec/tdd)
 
 A **seam** is the public interface a test exercises without reaching inside.
-Before writing the spec, sketch the seams this work will be tested at and
-confirm them with the user in one question. Three rules:
+Use the vocabulary and judgment tools in [design.md](design.md) — deep vs
+shallow modules, the deletion test, "one adapter is a hypothetical seam,
+two make it real". Before writing the spec, sketch the seams this work will
+be tested at and confirm them with the user in one question. Three rules:
 
 - **Existing seams first** — prefer interfaces the codebase already has
 - **Highest seam possible** — test where the behavior is observable to a
@@ -125,9 +138,14 @@ confirm them with the user in one question. Three rules:
 - **Fewer is better** — the ideal number is one; each extra seam needs a
   reason
 
-The confirmed list goes in the spec's **Test seams** section. Downstream,
-dev-plan may only place tests at these seams — a task that needs an
-unconfirmed seam is a spec change, not a planning decision.
+For each confirmed seam, classify its dependencies with design.md's
+four-category table — the category decides mock vs stand-in vs real
+mechanically, so dev-plan doesn't answer it ad hoc per task.
+
+The confirmed list (seams + dependency categories) goes in the spec's
+**Test seams** section. Downstream, dev-plan may only place tests at these
+seams — a task that needs an unconfirmed seam is a spec change, not a
+planning decision.
 
 ### 6. Write the spec
 
@@ -139,6 +157,14 @@ Success criteria.
 Write the spec in `CONTEXT.md` vocabulary throughout — a spec that invents
 its own words for things the glossary already names is a defect (step 7
 checks this).
+
+**ADR offer (from mattpocock domain-modeling):** if a decision locked in
+this spec meets ALL three conditions — hard to reverse, surprising without
+context, the result of a real trade-off — offer to record it as an ADR in
+`docs/adr/NNNN-<slug>.md`. One paragraph is a valid ADR: the decision,
+the why, the trade-off accepted. Miss any condition → skip; ADR noise is
+worse than no ADRs. Specs get archived; ADRs are what stops a future
+session from unknowingly re-litigating this.
 
 ### 7. Self-review, then user review
 
