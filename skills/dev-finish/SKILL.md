@@ -5,9 +5,9 @@ provenance:
   synthesized: 2026-07-14
   sources:
     - superpowers:verification-before-completion @6.1.1 (Iron Law, Gate Function, claim-evidence table, red-green regression rule)
-    - superpowers:finishing-a-development-branch @6.1.1 (integration options)
+    - superpowers:finishing-a-development-branch @6.1.1 (integration options; typed discard confirmation added 2026-07-23)
     - built-in /verify concept (drive the real flow, not just the test suite)
-    - superpowers:finishing-a-development-branch @6.1.1 second pass (typed discard confirmation; added 2026-07-23) + gstack TODOS.md deferral + mattpocock ADR offer
+    - gstack TODOS.md deferral + mattpocock ADR offer (added 2026-07-23)
 ---
 
 # dev-finish — Verification & Branch Integration
@@ -72,9 +72,9 @@ drive; "all tests pass but the feature doesn't work" is a routine failure.
 
 Open the plan's **Success Criteria** checklist (dev-plan header). Check every
 box with evidence, or say plainly which are unmet and why. Unmet criteria are
-reported, never silently dropped — and any the user accepts shipping without
-go into the repo's `TODOS.md` (What / Why deferred / Effort S-XL / Priority),
-same rule as dev-plan-review: unwritten deferrals evaporate.
+reported, never silently dropped. A criterion the user agrees to ship
+without is deferred work: record it in the repo's `TODOS.md` using
+dev-plan-review's entry format — unwritten deferrals evaporate.
 
 If `CONTEXT.md` exists: any new domain term this work introduced belongs in
 it, and public names in the diff should match its vocabulary. One-line check,

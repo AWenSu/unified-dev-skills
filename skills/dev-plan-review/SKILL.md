@@ -14,8 +14,7 @@ provenance:
 
 Rough plan in, reviewed plan out. Auto-decide only the Mechanical — findings
 with one defensible answer. Every genuine judgment call goes to the user as
-its own separate, fully-detailed question (Step 5); never batch them into
-one summary question.
+its own fully-detailed question, per the Step 5 rules.
 
 **Weight check:** this is the lean single-model version. For very large plans
 (>15 files, new product surface) where gstack is installed, prefer `/autoplan`
@@ -145,8 +144,8 @@ After all questions are resolved, present ONE closing summary:
 **Deferred work goes to TODOS.md (from gstack):** anything cut or deferred
 by a review decision — a rejected expansion, a "later" answer — is written
 to the repo's `TODOS.md` with What / Why deferred / Effort (S/M/L/XL) /
-Priority, readable by someone with zero context in 3 months. Vague
-intentions die; unwritten deferrals are how scope decisions evaporate.
+Priority, readable by someone with zero context in 3 months. Unwritten
+deferrals are how scope decisions evaporate.
 
 Append to the plan file:
 

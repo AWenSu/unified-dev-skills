@@ -7,7 +7,7 @@ provenance:
     - superpowers:writing-plans @6.1.1 (plan artifact format, Interfaces block, No Placeholders, task right-sizing, type-consistency check)
     - ~/.claude/agents/planner.md (risk grading, sizing guide, success-criteria checklist)
     - mattpocock/skills to-tickets + tdd @1.2.0 (Delivers behavior line, tests-only-at-confirmed-seams, expand–contract wide-refactor sequencing; added 2026-07-22)
-  dropped: nothing significant — these two composed cleanly
+  dropped: nothing significant — the sources composed cleanly
 ---
 
 # dev-plan — Implementation Planning
@@ -115,14 +115,16 @@ Rules that make plans executable:
 - **Right-sizing:** split only where a reviewer could meaningfully reject one
   task while approving its neighbor. Smaller is not automatically better.
 - **Tests only at confirmed seams.** Every "write failing test" step names
-  which seam from the spec's **Test seams** section it exercises. Tests
-  verify behavior through that interface — never internals, private methods,
-  or side channels. Expected values in test steps come from an independent
-  source of truth (known-good literal, worked example, the spec) — never
-  recomputed the way the implementation computes them (tautological test). A task that needs a seam the spec didn't confirm →
-  stop, take it back to the spec (it's a design change, not a planning
-  call). Spec has no Test seams section (pre-seam spec) → propose the seam
-  list to the user before writing tasks.
+  the seam from the spec's **Test seams** section it exercises, and the test
+  observes behavior through that interface only — no internals, no private
+  methods, no side channels. A task that needs an unconfirmed seam is a
+  design change: stop and take it back to the spec. If the spec predates
+  seam negotiation and has no Test seams section, propose the seam list to
+  the user before writing any task.
+- **Expected values are independent.** A test step's expected value comes
+  from a source the implementation can't influence — a known-good literal,
+  a worked example, the spec. Recomputing it the way the implementation
+  computes it makes the test tautological: it passes by construction.
 
 ### 3b. Wide refactors — expand–contract, not slices (from mattpocock to-tickets)
 
