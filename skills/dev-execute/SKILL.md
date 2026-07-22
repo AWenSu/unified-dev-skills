@@ -32,6 +32,14 @@ Tasks tightly coupled with shared evolving state? → INLINE, or go re-split the
 - **Glossary:** if `CONTEXT.md` exists at the repo root, include its path in
   every implementer/reviewer brief — code and test names follow its
   vocabulary.
+- **Code intelligence:** if the repo is indexed by CodeGraph (a `.codegraph/`
+  directory exists) or the codebase-memory-mcp server is connected, state
+  that in every implementer/reviewer brief and require its use: implementers
+  query it BEFORE grep/Read to locate symbols, find callers, and see the
+  blast radius of an edit; reviewers use it to check a finding's impact
+  beyond the diff (who else calls the changed code). One query typically
+  replaces a dozen grep/read round-trips. CodeGraph caveat: query in
+  English — Chinese queries silently return empty, not an error.
 - **Filesystem is memory** (from planning-with-files): keep `progress.md`
   (what happened) and `findings.md` (what was learned) next to the plan.
   After every ~2 exploratory operations, write findings down. Context windows
