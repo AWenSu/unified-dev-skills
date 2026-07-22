@@ -75,8 +75,7 @@ a real decision.
   answer. Walk every branch of the decision tree, resolving dependent
   decisions one by one — don't stop at "probably fine". Exit only when the
   user explicitly confirms shared understanding; never declare it yourself.
-  In grill mode, note in the spec header: `Discovery: grill mode` — this
-  tells dev-plan-review to escalate Taste-level decisions too.
+  In grill mode, note in the spec header: `Discovery: grill mode`.
 
 **Domain-language discipline (from domain-modeling)** — runs throughout this
 step, not after it:

@@ -11,9 +11,10 @@ provenance:
 
 # dev-plan-review — Multi-Lens Plan Review
 
-Rough plan in, reviewed plan out — without asking the user 15 questions along
-the way. Auto-decide everything that has a defensible default; escalate only
-what genuinely belongs to the user.
+Rough plan in, reviewed plan out. Auto-decide only the Mechanical — findings
+with one defensible answer. Every genuine judgment call goes to the user as
+its own separate, fully-detailed question (Step 5); never batch them into
+one summary question.
 
 **Weight check:** this is the lean single-model version. For very large plans
 (>15 files, new product surface) where gstack is installed, prefer `/autoplan`
@@ -62,8 +63,8 @@ Each lens returns: score 0–10, findings list, and for each finding a
 | Class | Definition | Handling |
 |-------|-----------|----------|
 | **Mechanical** | One defensible answer exists | Auto-decide silently, apply the edit |
-| **Taste** | Reasonable people could differ | Auto-decide, but log it for the final gate — **unless the spec header says `Discovery: grill mode`, in which case escalate Taste to the user like a User Challenge (the user opted into deciding these)** |
-| **User Challenge** | Review says the user's stated direction is wrong | NEVER auto-decide — escalate with the 5-field format |
+| **Taste** | Reasonable people could differ | Ask the user — one question per decision (see Step 5) |
+| **User Challenge** | Review says the user's stated direction is wrong | NEVER auto-decide — ask with the 5-field format |
 
 Auto-decisions follow the **6 principles** (from autoplan, verbatim intent):
 1. **Choose completeness** — prefer the option covering more edge cases
@@ -89,21 +90,39 @@ the skeptic kills are dropped with a one-line note. This is what separates
 Skip this step only for plans under 5 files — there the findings are cheap
 enough to just evaluate inline.
 
-## Step 5: Apply edits + final gate
+## Step 5: Ask the user, then apply edits + final gate
 
-Apply all surviving Mechanical + Taste edits directly to the plan file. Then
-present ONE summary to the user:
+Apply surviving **Mechanical** edits directly to the plan file.
+
+Then walk the user through every surviving **Taste** finding and **User
+Challenge** — **one question at a time, one finding per question** (use
+AskUserQuestion where available). Never batch them into a single summary
+question, and never proceed on an unanswered one. Each question carries full
+detail:
+
+- **Context** — which lens raised it, what part of the plan it touches
+  (quote the plan line), and the evidence behind it
+- **Options** — the concrete alternatives (2-4), each with its trade-off,
+  your recommended one first and marked
+- **Consequence** — what happens downstream if this goes the other way
+- User Challenges additionally use the 5-field format above, with the
+  user's stated direction as the default option
+
+Apply each answer to the plan file as it lands, before asking the next —
+answers often change what the next question should be; drop questions an
+earlier answer already settled.
+
+After all questions are resolved, present ONE closing summary:
 
 - Lens scores (before → after edits)
-- Taste decisions made (one line each — they can veto any)
-- User Challenges (if any — these block until answered)
+- Decisions made, one line each (Mechanical auto-applied + user-answered)
 
 Append to the plan file:
 
 ```markdown
 ## REVIEW REPORT
 Lenses: CEO 7→9, Eng 6→9 [, Design, DX]
-Taste decisions: <list>
+Decisions: <list — auto-applied Mechanical + user-answered Taste/Challenges>
 NO UNRESOLVED DECISIONS   ← or list them; execution is blocked until none remain
 ```
 
