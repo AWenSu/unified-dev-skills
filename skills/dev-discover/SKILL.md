@@ -6,6 +6,7 @@ provenance:
   sources:
     - superpowers:brainstorming @6.1.1 (workflow spine, HARD-GATE, one-question rule, spec self-review)
     - gstack:spec @1.60.1.0 (five-question intake, code-evidence rule, dedupe, scope lock)
+    - mattpocock/skills domain-modeling @1.2.0 (CONTEXT.md glossary: challenge terms, sharpen fuzzy language, inline updates)
   dropped: visual companion (niche, heavy), Codex quality gate (external dep), telemetry, GitHub issue filing (use gstack spec directly when you need issues)
 ---
 
@@ -40,6 +41,10 @@ cite `path:line` when you reference existing behavior. If you searched and
 found nothing, say "greenfield, nothing to cite" explicitly. Never ask the
 user something the codebase already answers.
 
+Read `CONTEXT.md` at the repo root if it exists — it is the project's domain
+glossary. Use its vocabulary in every question, spec section, and name you
+propose from here on.
+
 ### 2. Five-question intake
 
 Answer these five (ask the user only for the ones evidence can't answer):
@@ -58,7 +63,36 @@ work is the most expensive kind.
 
 Ask clarifying questions **one at a time**, multiple-choice where possible.
 Batching five questions gets you five shallow answers; one good question gets
-a real decision. Stop when you can state the requirements without guessing.
+a real decision.
+
+**Two depth settings (grill mode from mattpocock grilling):**
+
+- **Fast (default):** stop when you can state the requirements without
+  guessing.
+- **Grill:** activated when the user says "grill me" (or equivalent), or
+  automatically when the work is high-risk (production data, security
+  paths, irreversible operations). Every question carries your recommended
+  answer. Walk every branch of the decision tree, resolving dependent
+  decisions one by one — don't stop at "probably fine". Exit only when the
+  user explicitly confirms shared understanding; never declare it yourself.
+  In grill mode, note in the spec header: `Discovery: grill mode` — this
+  tells dev-plan-review to escalate Taste-level decisions too.
+
+**Domain-language discipline (from domain-modeling)** — runs throughout this
+step, not after it:
+
+- **Challenge conflicts.** The user uses a term that contradicts `CONTEXT.md`
+  → call it out immediately: "Glossary defines 'cancellation' as X, you seem
+  to mean Y — which is it?"
+- **Sharpen fuzzy terms.** Vague or overloaded word ("account", "sync",
+  "done") → propose a precise canonical term and get agreement.
+- **Cross-check code.** The user states how something works → verify the code
+  agrees; surface contradictions with `path:line`.
+- **Update CONTEXT.md inline.** The moment a term is resolved, write it to
+  `CONTEXT.md` — don't batch. Create the file on the first resolved term if
+  it doesn't exist. Format: `**Term** — definition (one line, no
+  implementation details)`. CONTEXT.md is a glossary and nothing else — no
+  specs, no scratch notes, no implementation decisions.
 
 If the request spans multiple subsystems, decompose FIRST: each sub-project
 gets its own discover → plan → execute cycle. Don't interrogate details of
@@ -80,16 +114,39 @@ State explicitly, and get agreement on:
 
 Scope agreed = scope locked. Later expansion is a new decision, not a drift.
 
+### 5b. Agree the test seams (from mattpocock to-spec/tdd)
+
+A **seam** is the public interface a test exercises without reaching inside.
+Before writing the spec, sketch the seams this work will be tested at and
+confirm them with the user in one question. Three rules:
+
+- **Existing seams first** — prefer interfaces the codebase already has
+- **Highest seam possible** — test where the behavior is observable to a
+  caller, not where the code happens to live
+- **Fewer is better** — the ideal number is one; each extra seam needs a
+  reason
+
+The confirmed list goes in the spec's **Test seams** section. Downstream,
+dev-plan may only place tests at these seams — a task that needs an
+unconfirmed seam is a spec change, not a planning decision.
+
 ### 6. Write the spec
 
 Write the design to `docs/specs/YYYY-MM-DD-<topic>.md` and commit it.
 Sections: Problem / Current behavior (with evidence) / Proposed design /
-Alternatives considered / Out of scope / Success criteria.
+Alternatives considered / Test seams (from 5b) / Out of scope /
+Success criteria.
+
+Write the spec in `CONTEXT.md` vocabulary throughout — a spec that invents
+its own words for things the glossary already names is a defect (step 7
+checks this).
 
 ### 7. Self-review, then user review
 
 One inline pass before showing the user — fix and move on, no re-review loop:
 - Placeholder scan: no "TBD", no "figure out later"
+- Glossary check: every domain term matches `CONTEXT.md`; terms resolved
+  during step 3 are actually written there
 - Consistency: does any section contradict another?
 - Ambiguity: could a stranger implement from this without asking you anything?
 - Scope: does anything in the design exceed what was locked in step 5?

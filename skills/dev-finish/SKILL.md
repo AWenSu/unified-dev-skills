@@ -73,6 +73,10 @@ Open the plan's **Success Criteria** checklist (dev-plan header). Check every
 box with evidence, or say plainly which are unmet and why. Unmet criteria are
 reported, never silently dropped.
 
+If `CONTEXT.md` exists: any new domain term this work introduced belongs in
+it, and public names in the diff should match its vocabulary. One-line check,
+report mismatches — don't rename code at this stage.
+
 ## Part 3: Integrate the branch
 
 All boxes checked, evidence fresh — present the user exactly these options:

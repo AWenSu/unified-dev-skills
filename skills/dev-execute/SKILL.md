@@ -26,6 +26,9 @@ Tasks tightly coupled with shared evolving state? → INLINE, or go re-split the
 - **Continuous execution:** do not pause between tasks to ask "should I
   continue?" — checkpoint questions burn the user's time. Stop only at the
   plan's end or on a genuine blocker.
+- **Glossary:** if `CONTEXT.md` exists at the repo root, include its path in
+  every implementer/reviewer brief — code and test names follow its
+  vocabulary.
 - **Filesystem is memory** (from planning-with-files): keep `progress.md`
   (what happened) and `findings.md` (what was learned) next to the plan.
   After every ~2 exploratory operations, write findings down. Context windows
@@ -43,11 +46,21 @@ Tasks tightly coupled with shared evolving state? → INLINE, or go re-split the
 2. **Dispatch a fresh implementer subagent** with the brief. If the task
    names domain skills (its `Skills:` field), the implementer invokes them
    before writing code. It implements, tests, commits, and reports status.
+   **Staleness rule:** before editing, the implementer verifies the task's
+   `Files:` paths/lines still match reality. Mismatch → relocate using the
+   task's `Delivers:` behavior, note the drift in the status report; never
+   blind-edit whatever now sits at the stated lines.
 3. **Review the diff** with a fresh reviewer subagent. Diff base is the
    commit before the task started — **never `HEAD~1`**, which silently drops
    all but the last commit of a multi-commit task. The reviewer returns TWO
-   verdicts: (a) spec compliance — does it do what the task says; (b) code
-   quality. Both must pass.
+   verdicts: (a) spec compliance — does it do what the task's `Delivers:`
+   says: missing behavior, scope creep, implemented-but-wrong; (b) code
+   quality — repo standards first, plus the smell baseline in
+   [smells.md](smells.md) (include its path in the brief). Both must pass.
+   **Never merge or rerank across the two axes** — each axis reports its own
+   findings and its own worst issue, no single winner (from mattpocock
+   code-review: a change can follow every standard and build the wrong
+   thing, or vice versa; one axis must not mask the other).
 4. **Fix loop:** Critical/Important findings → one fix subagent → re-review.
 5. **Ledger append** (see below), then next task.
 
@@ -91,7 +104,9 @@ a crashed session.
 ### Finish
 
 After all tasks: dispatch one final whole-branch reviewer (most capable
-model, diff from merge-base) → one fix pass for its findings → **dev-finish**.
+model, diff from merge-base, same two-axis rules: spec axis against the plan's
+Goal + Success Criteria, quality axis with [smells.md](smells.md), no merged
+ranking) → one fix pass for its findings → **dev-finish**.
 
 ## INLINE mode
 

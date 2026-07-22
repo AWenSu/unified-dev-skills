@@ -62,7 +62,7 @@ Each lens returns: score 0–10, findings list, and for each finding a
 | Class | Definition | Handling |
 |-------|-----------|----------|
 | **Mechanical** | One defensible answer exists | Auto-decide silently, apply the edit |
-| **Taste** | Reasonable people could differ | Auto-decide, but log it for the final gate |
+| **Taste** | Reasonable people could differ | Auto-decide, but log it for the final gate — **unless the spec header says `Discovery: grill mode`, in which case escalate Taste to the user like a User Challenge (the user opted into deciding these)** |
 | **User Challenge** | Review says the user's stated direction is wrong | NEVER auto-decide — escalate with the 5-field format |
 
 Auto-decisions follow the **6 principles** (from autoplan, verbatim intent):
